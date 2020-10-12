@@ -1,0 +1,250 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.select2-container--default .select2-selection--multiple .select2-selection__rendered {
+  margin-top:1em;
+}
+
+ .input_group {
+  position: relative;
+  margin-bottom: 0.8em;
+}
+
+.input_group input, .input_group select, .input_group textarea, .select2-container--default .select2-search--inline .select2-search__field {
+  padding-top: 0.9em !important;
+  padding-bottom: 0 !important;
+  width:30ch;
+}
+
+.input_group input:not([type=file]) {
+  border-radius: 0.4em !important;
+}
+
+.input_group label {
+  position: absolute;
+  left: 0.5em;
+  top: 0;
+  font-size: 0.7em;
+  cursor: text;
+  text-transform: uppercase;
+  color: #7b7b7b;
+}
+
+.user_total {
+  margin-left: 2em;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.input_group input[type=file] + label {
+    top: -0.4em;
+}
+
+.input_group input:focus ~ label,
+.input_group textarea:focus ~ label {
+    color: darkgrey;
+    font-size:0.65em;
+}
+
+table.admin-remaps-display {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+table.admin-remaps-display tbody td, table.admin-remaps-display thead td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/* Colour coding for remaps */
+table.admin-remaps-display tr.pending { background-color: #fae9e9 !important; }
+table.admin-remaps-display tr.pending:hover { background-color: #ffd9d9 !important; }
+
+table.admin-remaps-display tr.progress { background-color: #fef2da !important; }
+table.admin-remaps-display tr.progress:hover { background-color: #ffeecb !important; }
+
+table.admin-remaps-display tr.payment { background-color: #f1f1ff !important; }
+table.admin-remaps-display tr.payment:hover { background-color: #d5d5fa !important; }
+
+table.admin-remaps-display tr.complete { background-color: #e8f4e5 !important; }
+table.admin-remaps-display tr.complete:hover { background-color: #d7ecd1 !important; }
+
+table.admin-remaps-display tr:hover { 
+  background-color: #ddd !important; 
+}
+
+table.admin-remaps-display thead td {
+	padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #fffab6 !important;
+  color: #090909;
+  font-weight: bold;
+  font-size: 1.1em;
+  text-align: center;
+}
+
+div#adminControls { 
+    margin-bottom: 0.5em;
+    line-height: 3em; 
+}
+
+div#setMultiple, div#displayArchived, div#exportAll {
+  margin-right: 2em;
+  float: left;
+}
+
+input[type=file].autotune_updated_ecu {
+	display: none; /* Hide the file input so only the icon shows*/
+}
+
+table.admin-remaps-display td select option:disabled {
+	background-color: #dddddd!important;
+    cursor: not-allowed !important;
+}
+
+table.admin-remaps-display td input[type=text]::placeholder {
+	color: #c0c0c0;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: animatetop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: animatetop;
+  animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.modal .close {
+  color: black;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.modal .close:hover,
+.modal .close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  background-color: #fffab6 !important;
+  color: black;
+}
+
+.modal-body {padding: 2px 16px;}
+
+.modal-footer {
+  padding: 2px 16px;
+  background-color: #fffab6 !important;
+  color: black;
+}
+
+.modal-body table {
+	margin: auto;
+}
+
+.modal-body table tbody td, .modal-body table thead td {
+  padding: 8px;
+}
+
+#autotune-admin-display * {box-sizing: border-box}
+#autotune-admin-display {font-family: "Lato", sans-serif;}
+
+/* Style the tab */
+.tab {
+  float: left;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  width: 10%;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  display: block;
+  background-color: inherit;
+  color: black;
+  padding: 22px 16px;
+  width: 100%;
+  border: none;
+  outline: none;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current "tab button" class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  float: left;
+  padding: 0px 12px;
+  border: 1px solid #ccc;
+  width: 90%;
+}
+
+#wpfooter {
+    position: fixed;
+}
+
+.select2-results .select2-highlighted {
+    background: #f6f6f6;
+    color: #202020;
+}
+
+.ui-select-choices-row:hover {
+    background-color: #fffcd1 !important;
+}
+
+.select2-container {
+    margin-top: 8px;
+}

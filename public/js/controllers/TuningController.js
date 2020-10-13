@@ -71,11 +71,11 @@ autotune.controller('TuningController', ['$scope', '$timeout', 'TuningService', 
   TuningService.getStages($scope.selected).then(function(response){
   	$scope.selected.engine = response.data.engine;
 
-    // Get the brand
+    // Get the brand, model and year name
     var brand = $scope.brands.find(element => element.id === $scope.selected.brand),
-        model = $scope.brands.find(element => element.id === $scope.selected.model),
+        model = $scope.models.find(element => element.id === $scope.selected.model),
         year = $scope.buildyears.find(element => element.id === $scope.selected.buildyear);
-//year long_name
+
     if(!$scope.selected.engine.name){ 
       // We don't have the engine selected, don't populate contact form
       return false;
@@ -83,10 +83,10 @@ autotune.controller('TuningController', ['$scope', '$timeout', 'TuningService', 
     
     // Update the contact form on the page if it exists
     jQuery('textarea.car_details').text(
-               "Make: " + brand.name + ", Model: " +
-               model.name + ", \r\n Year: " +
-               year.long_name + ", \r\n Engine: " +
-               $scope.selected.engine.name + "" + $scope.selected.engine.power
+               "Make: " + brand.name + ",\r\n" + 
+               "Model: " + model.name + ",\r\n" + 
+               "Year: " + year.long_name + "\r\n" +
+               "Engine: " + $scope.selected.engine.name + " " + $scope.selected.engine.power
             );
   });
   };

@@ -463,7 +463,7 @@ class Autotune_Remaps_Public extends BaseClass {
 			LEFT JOIN ".$wpdb->prefix."users AS users ON users.id = ".$this->db_table_name.".user_id 
 			WHERE status < " . self::$STATUS['DELETED'] . "
 			AND type = " . self::$TYPE['REMAP'] . "
-			AND updated_at > DATE_ADD(DATE(NOW()), INTERVAL -1 DAY)
+			AND created_at > DATE_ADD(DATE(NOW()), INTERVAL -2 DAY)
 			ORDER BY remap_id DESC
 			LIMIT 500
 			",

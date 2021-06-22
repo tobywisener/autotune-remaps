@@ -355,61 +355,70 @@ class Autotune_Remaps_Public extends BaseClass {
 	 *  Register the route endpoints for the internal API communication from the front end.
 	 *
 	 * @since    1.0.0
-	 */	
+	 */
 	public function register_api() {
 
+        register_rest_route( // Resource for PUT a Remap (admin)
+	    	'autotune-remaps/v1', '/remaps',
+	    	[ 'methods' => WP_REST_Server::EDITABLE, 'callback' => [$this, 'api_update_remap'],
+	    	'args' => [
+					'remap_id' => [ 'validate_callback' =>  [ $this, 'api_validate_update_remap' ]],
+					'price' => [ 'validate_callback' =>  [ $this, 'api_validate_update_remap' ]],
+		    	]
+
+		    ]
+		);
+
+        register_rest_route( // Resource for PUT all Remaps (admin)
+	    	'autotune-remaps/v1', '/updatetestmofo',
+	    	[ 'methods' => WP_REST_Server::EDITABLE, 'callback' => function($request) {
+	    	    error_log("ekk");
+	    	    return "lol";
+	    	} ]
+		);
+
 		register_rest_route( // Resource for GET all Users (admin)
-	    	'autotune-remaps/v1', '/users', 
+	    	'autotune-remaps/v1', '/users',
 	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_all_users'] ]
 		);
 
 	    register_rest_route( // Resource for GET all Remaps (admin)
-	    	'autotune-remaps/v1', '/remaps', 
+	    	'autotune-remaps/v1', '/remaps',
 	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_all_remaps'] ]
 		);
 
 		register_rest_route( // Resource for GET all Remaps for the current user
-	    	'autotune-remaps/v1', '/user/(?P<id>\d+)/remaps', 
+	    	'autotune-remaps/v1', '/user/(?P<id>\d+)/remaps',
 	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_all_user_remaps'] ]
 		);
 
-		register_rest_route( // Resource for PUT a Remap (admin)
-	    	'autotune-remaps/v1', '/remaps', 
-	    	[ 'methods' => 'PUT', 'callback' => [$this, 'api_update_remap'],
-		    	'args' => [
-					'remap_id' => [ 'validate_callback' =>  [ $this, 'api_validate_update_remap' ]],
-					'price' => [ 'validate_callback' =>  [ $this, 'api_validate_update_remap' ]],
-		    	]
-		    ]
-		);
-
 		register_rest_route( // Resource for PUT all Remaps (admin)
-	    	'autotune-remaps/v1', '/remaps/all', 
+	    	'autotune-remaps/v1', '/remaps/all',
 	    	[ 'methods' => 'PUT', 'callback' => [$this, 'api_batch_update_remaps'] ]
 		);
 
 		register_rest_route( // Resource for GET all Remaps (admin export)
-	    	'autotune-remaps/v1', '/remaps/all', 
+	    	'autotune-remaps/v1', '/remaps/all',
 	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_batch_export_remaps'] ]
 		);
 
 		register_rest_route( // Resource for POST IPN data from PayPal
-	    	'autotune-remaps/v1', '/remaps/payment', 
+	    	'autotune-remaps/v1', '/remaps/payment',
 	    	[ 'methods' => 'POST', 'callback' => [$this, 'api_post_payment_callback'] ]
 		);
 
 		register_rest_route( // Resource for downloading a completed/remapped ECU file
-	    	'autotune-remaps/v1', '/remaps/(?P<id>\d+)/download', 
+	    	'autotune-remaps/v1', '/remaps/(?P<id>\d+)/download',
 	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_remap_download_link'] ]
 		);
 
 		register_rest_route( // Resource for downloading an originally uploaded ECU file
-	    	'autotune-remaps/v1', '/remaps/(?P<id>\d+)/download/original', 
+	    	'autotune-remaps/v1', '/remaps/(?P<id>\d+)/download/original',
 	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_original_remap_download_link'] ]
 		);
 
 		register_rest_route( // Resource for POST charge
-	    	'autotune-remaps/v1', '/charges', 
+	    	'autotune-remaps/v1', '/charges',
 	    	[ 'methods' => 'POST', 'callback' => [$this, 'api_post_charges'] ]
 		);
 

@@ -93,7 +93,7 @@ autotune.service('TuningService', function($http) {
 	// Function to update a remap in storage
 	this.updateRemap = function(remap) {
 
-		return $http.put(api_url + '/remaps', remap);
+		return $http.post(api_url + '/remaps', remap);
 	};
 
 	// Function to update a set of remaps in storage

@@ -120,6 +120,7 @@ class Autotune_Remaps_Public extends BaseClass {
 	/**
 	 * Display the end user form for requesting a remap
 	 *
+	 * [autotune_submit_remap]
 	 * @since    1.0.0
 	 */
 	public function submit_remap_form() {
@@ -322,6 +323,7 @@ class Autotune_Remaps_Public extends BaseClass {
 	/**
 	 * Display the Angular checker widget
 	 *
+	 * [autotune_checker]
 	 * @since    1.0.0
 	 */
 	public function display_checker() {
@@ -596,7 +598,7 @@ class Autotune_Remaps_Public extends BaseClass {
 		// Get the updated remap resource from storage
 		$updated_remap = $this->get_remap($req_params['resource']->remap_id);
 
-		if($original_remap->type == self::$TYPE['remap'] 
+		if($original_remap->type == self::$TYPE['REMAP'] 
 			&& $original_remap->status != $req_params['status']) {
 			// The status of this email has been updated
 
@@ -714,19 +716,18 @@ class Autotune_Remaps_Public extends BaseClass {
 		}
 
 		$full_target_path = $this->target_dir.self::$completed_salt.$remap->remap_file;
-		$ext = pathinfo($full_target_path, PATHINFO_EXTENSION);
-
-		header('Content-Type: application/octet-stream');
-		header("Content-Transfer-Encoding: Binary"); 
-		header("Content-disposition: attachment; filename=\"" . $this->get_remap_filename($remap, true) . "\""); 
-		readfile($full_target_path); 
-
+		$mime_type = mime_content_type($full_target_path);
+		
+		header('Content-Type: ' . $mime_type);
+		header("Content-Transfer-Encoding: Binary; charset=ansi"); 
+		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap, true) . "\""); 
+		readfile($full_target_path);
 	}
 
 	/**
 	 *  API endpoint to get the download link of an originally uploaded Remap file
 	 *
-	 * @since    1.0.0
+	 * @since    1.0.0`
 	 */	
 	function api_get_original_remap_download_link(WP_REST_Request $request) {
 
@@ -739,14 +740,16 @@ class Autotune_Remaps_Public extends BaseClass {
 		}
 
 		$full_target_path = $this->target_dir.$remap->remap_file;
-
-		header('Content-Type: application/octet-stream');
-		header("Content-Transfer-Encoding: Binary"); 
-		header("Content-disposition: attachment; filename=\"" . $this->get_remap_filename($remap) . "\""); 
+		
+		$mime_type = mime_content_type($full_target_path);
+		
+		header('Content-Type: ' . $mime_type);
+		header("Content-Transfer-Encoding: Binary; charset=ansi"); 
+		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap, true) . "\""); 
 		readfile($full_target_path); 
-
 	}
 
+	
 
 	/**
 	 *  API endpoint for handling payment IPN (PayPal) messages for a remap

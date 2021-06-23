@@ -1,11 +1,11 @@
 autotune.service('TuningService', function($http) {
   	
   	// The endpoint for the plugin's internal REST API
-  	var api_url = "/wp-json/autotune-remaps/v1";
+  	var api_url = "/testsite/wp-json/autotune-remaps/v1";
 
   	// The full URI for the plugin's checker internal API
   	// TODO: Move this functionality within the plugins official REST API
-  	var checker_api_url = "/wp-content/plugins/autotune-remaps/autotune-api.php";
+  	var checker_api_url = "/testsite/wp-content/plugins/autotune-remaps/autotune-api.php";
 
   	// The status enum for remaps
   	var STATUS = {

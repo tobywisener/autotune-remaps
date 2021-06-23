@@ -558,16 +558,10 @@ class Autotune_Remaps_Public extends BaseClass {
 				if(!in_array($value, array_values(self::$STATUS))) return false;
 
 				// Ensure there is a price set before going to payment
-				if($value == self::$STATUS['payment'] && $request['price'] == NULL) return false;
+				if($value == self::$STATUS['payment'] && $request['price'] === NULL) return false;
 
 			break;
 
-			case "price":
-
-				// Ensure the price is an integer and isn't 0
-				if(intval($value) == 0) return false;
-
-			break;
 		}
 		
 		

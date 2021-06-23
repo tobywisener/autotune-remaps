@@ -105,7 +105,7 @@
                             <select ng-model="remap.status" 
                                 ng-change="updateRemap(remap)">
                                 <option value="0">PENDING</option> 
-                                <option value="1" ng-disabled="remap.price == null || remap.price == 0" title="{{ inProgressStatusTitle(remap) }}">IN PROGRESS</option>   
+                                <option value="1" ng-disabled="remap.price == null" title="{{ inProgressStatusTitle(remap) }}">IN PROGRESS</option>   
                                 <option value="2" ng-disabled="remap.price == null || remap.price == 0" title="{{ paymentStatusTitle(remap) }}">PAYMENT</option>   
                                 <option value="3">COMPLETE</option>   
                                 <option value="4">ARCHIVED</option>     

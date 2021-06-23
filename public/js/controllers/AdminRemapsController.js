@@ -83,18 +83,24 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
     // Function to determine whether the admin can download the original map or not
     $scope.canDownloadOriginalMap = function(remap) {
     	return ((remap.type == 0 /* Remap */ || remap.type == 1 /* Service */) 
-            && remap.price != null && remap.price > 0 && remap.status >= 1 /* IN_PROGRESS */);
+            && remap.price != null /* IN_PROGRESS */);
     };
-
+/**
+ * Removed remap.price == 0 for: 
+ *      inProgressStatusTitle
+ *      paymentStatusTitle 
+ * 
+ */
     $scope.inProgressStatusTitle = function(remap) {
-    	if(remap.price == null || remap.price == 0) return "Please set a price before starting this job";
+    	if(remap.price == null) return "Please set a price before starting this job";
 
     	return "Set the remap to in progress and email the user to notify them";
     };
 
     // Function to return an appropriate title="" attribute for the 'payment' option on the status dropdown
     $scope.paymentStatusTitle = function(remap) {
-    	if(remap.price == null || remap.price == 0) return "Please set a price before requesting payment";
+    	if(remap.price == null) 
+        return "Please set a price before requesting payment";
 
     	return "Request payment via PayPal before allowing download";
     };

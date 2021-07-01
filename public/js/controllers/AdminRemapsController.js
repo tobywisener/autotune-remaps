@@ -86,6 +86,12 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
             && remap.price != null && remap.price > 0 && remap.status >= 1 /* IN_PROGRESS */);
     };
 
+    // Function to determine whether the admin can download the completed map or not
+    $scope.canDownloadCompletedMap = function(remap) {
+        return ((remap.type == 0 /* Remap */ || remap.type == 1 /* Service */)
+            && remap.price != null && remap.price > 0 && remap.status > 1 /* IN_PROGRESS */);
+    };
+
     $scope.inProgressStatusTitle = function(remap) {
     	if(remap.price == null || remap.price == 0) return "Please set a price before starting this job";
 
@@ -187,6 +193,12 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
 
 		TuningService.downloadOriginalMapFile(remap.remap_id);
 	};
+
+    // Function to fetch the download link for the (completed) given remap
+    $scope.downloadCompletedMapFile = function(remap) {
+
+        TuningService.downloadMapFile(remap.remap_id);
+    };
 
 	// Function to open the details of a given remap
 	$scope.viewDetails = function(remap) {

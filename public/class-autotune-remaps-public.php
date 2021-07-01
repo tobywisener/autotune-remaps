@@ -729,8 +729,9 @@ class Autotune_Remaps_Public extends BaseClass {
 		
 		header('Content-Type: ' . $mime_type);
 		header("Content-Transfer-Encoding: Binary; charset=ansi"); 
-		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap, true) . "\""); 
+		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap, true /* Completed */) . "\"");
 		readfile($full_target_path);
+		exit;
 	}
 
 	/**
@@ -754,11 +755,10 @@ class Autotune_Remaps_Public extends BaseClass {
 		
 		header('Content-Type: ' . $mime_type);
 		header("Content-Transfer-Encoding: Binary; charset=ansi"); 
-		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap, true) . "\""); 
-		readfile($full_target_path); 
+		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap, false /* Not completed */) . "\"");
+		readfile($full_target_path);
+		exit;
 	}
-
-	
 
 	/**
 	 *  API endpoint for handling payment IPN (PayPal) messages for a remap

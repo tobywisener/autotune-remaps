@@ -54,6 +54,11 @@ table.admin-remaps-display {
   width: 100%;
 }
 
+table.admin-remaps-display span.dashicons.dashicons-download.completed {
+  /* Make the completed download button green to differentiate */
+  color: #20d720;
+}
+
 table.admin-remaps-display tbody td, table.admin-remaps-display thead td {
   border: 1px solid #ddd;
   padding: 8px;

@@ -125,6 +125,8 @@
                             
                                 <label ng-if="canDownloadOriginalMap(remap)" ng-click="downloadMapFile(remap)" title="Download the original ECU file"><span class="dashicons dashicons-download"></span></label>
 
+                                <label ng-if="canDownloadCompletedMap(remap)" ng-click="downloadCompletedMapFile(remap)" title="Download the completed ECU file"><span class="dashicons dashicons-download completed"></span></label>
+
                                 <input type="hidden" name="autoune_remap_id" value="{{ remap.remap_id }}"/>
 
                                 <input data-file type="file" name="autotune_updated_ecu" style="display: none;"

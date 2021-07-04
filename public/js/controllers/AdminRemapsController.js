@@ -194,6 +194,12 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
 		TuningService.downloadOriginalMapFile(remap.remap_id);
 	};
 
+    // Function to fetch the download link for the (completed) given remap
+    $scope.downloadCompletedMapFile = function(remap) {
+
+        TuningService.downloadMapFile(remap.remap_id);
+    };
+
 	// Function to open the details of a given remap
 	$scope.viewDetails = function(remap) {
 		$scope.viewingDetailsRemap = remap;

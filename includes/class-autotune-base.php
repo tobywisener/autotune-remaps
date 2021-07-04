@@ -301,17 +301,9 @@ class BaseClass {
 	 *
 	 * @since    1.0.0
 	 */
-	protected function get_remap_filename($remap, $completed = false) {
+	protected function get_remap_filename($remap) {
 
-		// Get the extension of the remap file
-		$ext = pathinfo($remap->remap_file, PATHINFO_EXTENSION);
-		$filename = $remap->remap_id . "_".$remap->manufacturer."_".$remap->model."_".$remap->year."_".$remap->username."." . $ext;
-
-		if($completed) {
-			$filename = self::$completed_salt . $filename;
-		}
-
-		return $filename;
+		return $filename = $remap->remap_file;
 	}
 
 	/**

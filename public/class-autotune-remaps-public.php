@@ -213,8 +213,11 @@ class Autotune_Remaps_Public extends BaseClass {
 		$format = array('%s','%d');
 		$wpdb->insert($this->db_table_name,$data,$format);
 		$new_remap_id = $wpdb->insert_id;
+		
 		$updated_filename = pathinfo($_FILES['autotune_file']['name'], PATHINFO_FILENAME) . "_" . $new_remap_id;
-
+		
+		rename($full_target_path,  $this->target_dir.$updated_filename.".".$ext);
+		
 		$wpdb->update($this->db_table_name, array('remap_file'=> $updated_filename .".". $ext), array('remap_id'=>$new_remap_id ));/*update the filename in DB to correct format */
 
 		if(is_int($new_remap_id) && $new_remap_id > 1 /* The insert remap succeeded */) {
@@ -732,7 +735,7 @@ class Autotune_Remaps_Public extends BaseClass {
 		
 		header('Content-Type: ' . $mime_type);
 		header("Content-Transfer-Encoding: Binary; charset=ansi"); 
-		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap, true /* Completed */) . "\"");
+		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap /* Completed */) . "\"");
 		readfile($full_target_path);
 		exit;
 	}
@@ -758,8 +761,7 @@ class Autotune_Remaps_Public extends BaseClass {
 		
 		header('Content-Type: ' . $mime_type);
 		header("Content-Transfer-Encoding: Binary; charset=ansi"); 
-		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap, false /* Not completed */) . "\"");
-		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap, false /* Not completed */) . "\"");
+		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap /* Not completed */) . "\"");
 		readfile($full_target_path); 
 		exit;
 	}

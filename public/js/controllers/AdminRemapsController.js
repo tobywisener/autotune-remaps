@@ -85,6 +85,12 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
     	return ((remap.type == 0 /* Remap */ || remap.type == 1 /* Service */) 
             && remap.price != null /* IN_PROGRESS */);
     };
+    
+    // Function to determine whether the admin can download the completed map or not
+    $scope.canDownloadCompletedMap = function(remap) {
+        return ((remap.type == 0 /* Remap */ || remap.type == 1 /* Service */)
+            && remap.price != null && remap.price > 0 && remap.status > 1 /* IN_PROGRESS */);
+    };
 /**
  * Removed remap.price == 0 for: 
  *      inProgressStatusTitle

@@ -303,7 +303,10 @@ class BaseClass {
 	 */
 	protected function get_remap_filename($remap) {
 
-		return $filename = $remap->remap_file;
+		$ext = pathinfo($remap->remap_file, PATHINFO_EXTENSION);
+		$filename = pathinfo($remap->remap_file,PATHINFO_FILENAME).".".$ext;
+
+		return $filename;
 	}
 
 	/**

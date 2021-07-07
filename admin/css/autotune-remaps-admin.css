@@ -97,7 +97,7 @@ div#adminControls {
     line-height: 3em; 
 }
 
-div#setMultiple, div#displayArchived, div#exportAll {
+div#setMultiple, div#displayArchived, div#hidePrices, div#exportAll {
   margin-right: 2em;
   float: left;
 }

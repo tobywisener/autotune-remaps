@@ -568,12 +568,7 @@ class Autotune_Remaps_Public extends BaseClass {
 
 			break;
 
-			case "price":
-
-				// Ensure the price is an integer and isn't 0
-				if(intval($value) == 0) return false;
-
-			break;
+			
 		}
 		
 		

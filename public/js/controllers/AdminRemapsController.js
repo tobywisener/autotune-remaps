@@ -17,6 +17,8 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
 
     $scope.displayArchivedRemaps = false;
 
+    $scope.hidePricesToggle = false;
+
     $scope.allRemapsSelected = false;
 
     $scope.setAllRemapsStatus = null;

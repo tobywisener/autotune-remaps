@@ -471,6 +471,13 @@ class Autotune_Remaps_Public extends BaseClass {
 	 */	
 	public function api_get_all_remaps(WP_REST_Request $request, $output = OBJECT) {
 		global $wpdb;
+		
+		$isExport = ($output == ARRAY_A /* ARRAY_A is only used during export */);
+		$limit = "LIMIT 500"; // By default, only show 500 remaps
+		if ($isExport) {
+			// For exports, show unlimited remaps
+			$limit = "";
+		}
 
 		$results = $wpdb->get_results( 
 			"
@@ -481,9 +488,7 @@ class Autotune_Remaps_Public extends BaseClass {
 			WHERE status <> " . self::$STATUS['DELETED'] . "
 			AND type = " . self::$TYPE['REMAP'] . "
 			AND created_at > DATE_ADD(DATE(NOW()), INTERVAL -2 DAY)
-			ORDER BY remap_id DESC
-
-			",
+			ORDER BY remap_id DESC ".$limit,
 			$output
 		);
 
@@ -686,6 +691,7 @@ class Autotune_Remaps_Public extends BaseClass {
 	function api_batch_export_remaps(WP_REST_Request $request) {
 		global $wpdb;
 
+		// Give us the remap data as an associative array
 		$remaps = $this->api_get_all_remaps($request, ARRAY_A);
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();

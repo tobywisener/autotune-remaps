@@ -14,7 +14,8 @@ autotune.service('TuningService', function($http) {
 		"PAYMENT": 2,
 		"COMPLETE": 3,
 		"ARCHIVED": 4,
-		"DELETED": 5
+		"DELETED": 5,
+		"PARKED": 6
   	};
 
   	// Function to get a humanized version of an enum key in Sherlayer JS object.

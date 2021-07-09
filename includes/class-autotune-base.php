@@ -83,7 +83,8 @@ class BaseClass {
 		"PAYMENT" => 2,
 		"COMPLETE" => 3,
 		"ARCHIVED" => 4,
-		"DELETED"  => 5
+		"DELETED"  => 5,
+		"PARKED" => 6
 	];
 
 	/**
@@ -290,7 +291,7 @@ class BaseClass {
 			SELECT *
 			FROM ".$this->db_table_name."
 			WHERE user_id = '".$user_id."'
-				AND status < ".self::$STATUS["DELETED"]."
+				AND status <> ".self::$STATUS["DELETED"]."
 			ORDER BY updated_at DESC
 			"
 		);

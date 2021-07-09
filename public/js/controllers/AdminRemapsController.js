@@ -59,7 +59,7 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
     // Function to derermine whether the admin can upload a map or not
     $scope.canUploadMap = function(remap) {
     	return (remap.type == 0 /* Remap */ || remap.type == 1 /* Service */) 
-            &&(remap.status >= 1 && remap.status < 3);
+            &&(remap.status >= 1 && remap.status < 3 || remap.status == 6);
     };
 
     // Function to return an appropriate CSS class for colour coding

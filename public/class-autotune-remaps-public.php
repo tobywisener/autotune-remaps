@@ -478,7 +478,7 @@ class Autotune_Remaps_Public extends BaseClass {
 			users.user_nicename AS username
 			FROM ".$this->db_table_name." 
 			LEFT JOIN ".$wpdb->prefix."users AS users ON users.id = ".$this->db_table_name.".user_id 
-			WHERE status < " . self::$STATUS['DELETED'] . "
+			WHERE status <> " . self::$STATUS['DELETED'] . "
 			AND type = " . self::$TYPE['REMAP'] . "
 			AND created_at > DATE_ADD(DATE(NOW()), INTERVAL -2 DAY)
 			ORDER BY remap_id DESC
@@ -507,7 +507,7 @@ class Autotune_Remaps_Public extends BaseClass {
 		// Sum up the totals for this user
 		foreach($user_remaps as $remap) {
 			if(in_array($remap->status, 
-				[ self::$STATUS["ARCHIVED"], self::$STATUS["DELETED"] ] )) {
+				[ self::$STATUS["ARCHIVED"], self::$STATUS["DELETED"], self::$STATUS["PARKED"]] )) {
 				continue; // Don't total Archived or Deleted remaps
 			}
 
@@ -721,7 +721,7 @@ class Autotune_Remaps_Public extends BaseClass {
 			return "[The remap you are trying to download could not be found]";
 		}
 
-		if($remap->status != self::$STATUS['COMPLETE']) {
+		if($remap->status != self::$STATUS['COMPLETE'] && $remap->status != self::$STATUS['PARKED']) {
 			return "[This remap is not yet completed]";
 		}
 

@@ -112,7 +112,8 @@
                                 <option value="2" ng-disabled="remap.price == null" title="{{ paymentStatusTitle(remap) }}">PAYMENT</option>   
                                 <option value="3">COMPLETE</option>   
                                 <option value="4">ARCHIVED</option>     
-                                <option value="5">DELETED</option>       
+                                <option value="5">DELETED</option>     
+                                <option value="6">PARKED</option>  
                             </select>
 
                         </td>
@@ -154,6 +155,7 @@
                                 <option value="3">COMPLETE</option>   
                                 <option value="4">ARCHIVED</option>     
                                 <option value="5">DELETED</option>       
+                                <option value="6">PARKED</option>
                             </select>
 
                             <span ng-if="remap.type == 3" style="text-align: center;"> << PAID >> </span>

@@ -1,11 +1,11 @@
 autotune.service('TuningService', function($http) {
   	
   	// The endpoint for the plugin's internal REST API
-  	var api_url = "/testsite/wp-json/autotune-remaps/v1";
+  	var api_url = "/wp-json/autotune-remaps/v1";
 
   	// The full URI for the plugin's checker internal API
   	// TODO: Move this functionality within the plugins official REST API
-  	var checker_api_url = "/testsite/wp-content/plugins/autotune-remaps/autotune-api.php";
+  	var checker_api_url = "/wp-content/plugins/autotune-remaps/autotune-api.php";
 
   	// The status enum for remaps
   	var STATUS = {
@@ -44,27 +44,27 @@ autotune.service('TuningService', function($http) {
 	this.getBrands = function() {
 		return $http.get(checker_api_url, { 'lol': true });
 	};
-    
+
     this.getModels = function(selected) {
 		return $http.get(checker_api_url + "?manufacturer="+selected.brand);
 	};
-    
+
     this.getBuildYears = function(selected) {
 		return $http.get(checker_api_url + "?manufacturer="+selected.brand+"&model="+selected.model);
 	};
-    
+
     this.getMotors = function(selected) {
 		return $http.get(checker_api_url + "?manufacturer="+selected.brand
         +"&model="+selected.model
         +"&build_year="+selected.buildyear);
 	};
-    
+
     this.getModelIcon = function(selected) {
 		return $http.get(checker_api_url + "?manufacturer="+selected.brand
         +"&model="+selected.model
         +"&model_icon=true");
 	};
-    
+
     this.getStages = function(selected) {
 		return $http.get(checker_api_url + "?manufacturer="+selected.brand
         +"&model="+selected.model
@@ -115,17 +115,17 @@ autotune.service('TuningService', function($http) {
 	// Function to format a date string
 	this.formatDate = function(mysql_datetime) {
 		if(mysql_datetime == null) return "...";
-		
+
 		return Date.createFromMysql(mysql_datetime).toLocaleString("en-GB");
 	};
 
 	// Function to create a charge relating to a user
 	this.createCharge = function(formData) {
-		return $http.post(api_url + '/charges', 
-			{ 'charge': formData }, 
-			{ 
+		return $http.post(api_url + '/charges',
+			{ 'charge': formData },
+			{
 				transformRequest: angular.identity,
-				headers: {'Content-Type': undefined} 
+				headers: {'Content-Type': undefined}
 			});
 	};
 });

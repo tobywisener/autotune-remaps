@@ -292,7 +292,7 @@
 <div style="color:#555555;font-family:Arial, Helvetica Neue, Helvetica, sans-serif;line-height:1.2;padding-top:10px;padding-right:10px;padding-bottom:10px;padding-left:10px;">
 <div style="font-size: 14px; line-height: 1.2; color: #555555; font-family: Arial, Helvetica Neue, Helvetica, sans-serif; mso-line-height-alt: 17px;">
 	<p style="font-size:20px;line-height:1.2;word-break:break-word;margin:0;text-align: center; margin-top:1em;"><a style="font-size: 17px;padding: 15px;background: #e2c21f;color: white;border-radius: 3px;cursor: pointer;"
-	href="<?php echo $data["download_link"]; ?>">Downlaod Map File</a></p>
+	href="<?php echo $data["download_link"]; ?>">Download Map File</a></p>
   <p style="font-size:20px;line-height:1.2;word-break:break-word;margin:0;text-align: center;margin-top:2.5em;margin-bottom:1em;"><a style="font-size: 14px;padding: 15px;background: grey;color: white;border-radius: 3px;cursor: pointer;"
 	href="<?php echo $data["remaps_link"]; ?>">View All Remap(s)</a></p>
 </div>

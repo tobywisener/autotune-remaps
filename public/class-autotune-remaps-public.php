@@ -213,6 +213,12 @@ class Autotune_Remaps_Public extends BaseClass {
 		$format = array('%s','%d');
 		$wpdb->insert($this->db_table_name,$data,$format);
 		$new_remap_id = $wpdb->insert_id;
+		
+		$updated_filename = pathinfo($_FILES['autotune_file']['name'], PATHINFO_FILENAME) . "_" . $new_remap_id;
+		
+		rename($full_target_path,  $this->target_dir.$updated_filename.".".$ext);
+		
+		$wpdb->update($this->db_table_name, array('remap_file'=> $updated_filename .".". $ext), array('remap_id'=>$new_remap_id ));/*update the filename in DB to correct format */
 
 		if(is_int($new_remap_id) && $new_remap_id > 1 /* The insert remap succeeded */) {
 			$wp_session['autotune_submit_remap_id'] = 1 /* Don't send the real remap ID to the front end */;
@@ -366,7 +372,7 @@ class Autotune_Remaps_Public extends BaseClass {
 	    	'args' => [
 					'remap_id' => [ 'validate_callback' =>  [ $this, 'api_validate_update_remap' ]],
 					'price' => [ 'validate_callback' =>  [ $this, 'api_validate_update_remap' ]],
-		    	]
+				],'permission_callback' => '__return_true'
 
 		    ]
 		);
@@ -376,52 +382,52 @@ class Autotune_Remaps_Public extends BaseClass {
 	    	[ 'methods' => WP_REST_Server::EDITABLE, 'callback' => function($request) {
 	    	    error_log("ekk");
 	    	    return "lol";
-	    	} ]
+	    	}, 'permission_callback' => '__return_true']
 		);
 
 		register_rest_route( // Resource for GET all Users (admin)
 	    	'autotune-remaps/v1', '/users',
-	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_all_users'] ]
+	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_all_users'], 'permission_callback' => '__return_true' ]
 		);
 
 	    register_rest_route( // Resource for GET all Remaps (admin)
 	    	'autotune-remaps/v1', '/remaps',
-	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_all_remaps'] ]
+	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_all_remaps'], 'permission_callback' => '__return_true' ]
 		);
 
 		register_rest_route( // Resource for GET all Remaps for the current user
 	    	'autotune-remaps/v1', '/user/(?P<id>\d+)/remaps',
-	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_all_user_remaps'] ]
+	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_all_user_remaps'], 'permission_callback' => '__return_true' ]
 		);
 
 		register_rest_route( // Resource for PUT all Remaps (admin)
 	    	'autotune-remaps/v1', '/remaps/all',
-	    	[ 'methods' => 'PUT', 'callback' => [$this, 'api_batch_update_remaps'] ]
+	    	[ 'methods' => WP_REST_Server::EDITABLE, 'callback' => [$this, 'api_batch_update_remaps'], 'permission_callback' => '__return_true' ]
 		);
 
 		register_rest_route( // Resource for GET all Remaps (admin export)
 	    	'autotune-remaps/v1', '/remaps/all',
-	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_batch_export_remaps'] ]
+	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_batch_export_remaps'], 'permission_callback' => '__return_true' ]
 		);
 
 		register_rest_route( // Resource for POST IPN data from PayPal
 	    	'autotune-remaps/v1', '/remaps/payment',
-	    	[ 'methods' => 'POST', 'callback' => [$this, 'api_post_payment_callback'] ]
+	    	[ 'methods' => 'POST', 'callback' => [$this, 'api_post_payment_callback'], 'permission_callback' => '__return_true' ]
 		);
 
 		register_rest_route( // Resource for downloading a completed/remapped ECU file
 	    	'autotune-remaps/v1', '/remaps/(?P<id>\d+)/download',
-	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_remap_download_link'] ]
+	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_remap_download_link'], 'permission_callback' => '__return_true' ]
 		);
 
 		register_rest_route( // Resource for downloading an originally uploaded ECU file
 	    	'autotune-remaps/v1', '/remaps/(?P<id>\d+)/download/original',
-	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_original_remap_download_link'] ]
+	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_get_original_remap_download_link'], 'permission_callback' => '__return_true' ]
 		);
 
 		register_rest_route( // Resource for POST charge
 	    	'autotune-remaps/v1', '/charges',
-	    	[ 'methods' => 'POST', 'callback' => [$this, 'api_post_charges'] ]
+	    	[ 'methods' => 'POST', 'callback' => [$this, 'api_post_charges'],'permission_callback' => '__return_true' ]
 		);
 
 	}
@@ -465,6 +471,13 @@ class Autotune_Remaps_Public extends BaseClass {
 	 */	
 	public function api_get_all_remaps(WP_REST_Request $request, $output = OBJECT) {
 		global $wpdb;
+		
+		$isExport = ($output == ARRAY_A /* ARRAY_A is only used during export */);
+		$limit = "LIMIT 500"; // By default, only show 500 remaps
+		if ($isExport) {
+			// For exports, show unlimited remaps
+			$limit = "";
+		}
 
 		$results = $wpdb->get_results( 
 			"
@@ -472,12 +485,10 @@ class Autotune_Remaps_Public extends BaseClass {
 			users.user_nicename AS username
 			FROM ".$this->db_table_name." 
 			LEFT JOIN ".$wpdb->prefix."users AS users ON users.id = ".$this->db_table_name.".user_id 
-			WHERE status < " . self::$STATUS['DELETED'] . "
+			WHERE status <> " . self::$STATUS['DELETED'] . "
 			AND type = " . self::$TYPE['REMAP'] . "
 			AND created_at > DATE_ADD(DATE(NOW()), INTERVAL -2 DAY)
-			ORDER BY remap_id DESC
-			LIMIT 500
-			",
+			ORDER BY remap_id DESC ".$limit,
 			$output
 		);
 
@@ -501,7 +512,7 @@ class Autotune_Remaps_Public extends BaseClass {
 		// Sum up the totals for this user
 		foreach($user_remaps as $remap) {
 			if(in_array($remap->status, 
-				[ self::$STATUS["ARCHIVED"], self::$STATUS["DELETED"] ] )) {
+				[ self::$STATUS["ARCHIVED"], self::$STATUS["DELETED"], self::$STATUS["PARKED"]] )) {
 				continue; // Don't total Archived or Deleted remaps
 			}
 
@@ -562,12 +573,7 @@ class Autotune_Remaps_Public extends BaseClass {
 
 			break;
 
-			case "price":
-
-				// Ensure the price is an integer and isn't 0
-				if(intval($value) == 0) return false;
-
-			break;
+			
 		}
 		
 		
@@ -685,6 +691,7 @@ class Autotune_Remaps_Public extends BaseClass {
 	function api_batch_export_remaps(WP_REST_Request $request) {
 		global $wpdb;
 
+		// Give us the remap data as an associative array
 		$remaps = $this->api_get_all_remaps($request, ARRAY_A);
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
@@ -720,7 +727,7 @@ class Autotune_Remaps_Public extends BaseClass {
 			return "[The remap you are trying to download could not be found]";
 		}
 
-		if($remap->status != self::$STATUS['COMPLETE']) {
+		if($remap->status != self::$STATUS['COMPLETE'] && $remap->status != self::$STATUS['PARKED']) {
 			return "[This remap is not yet completed]";
 		}
 
@@ -729,7 +736,7 @@ class Autotune_Remaps_Public extends BaseClass {
 		
 		header('Content-Type: ' . $mime_type);
 		header("Content-Transfer-Encoding: Binary; charset=ansi"); 
-		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap, true /* Completed */) . "\"");
+		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap /* Completed */) . "\"");
 		readfile($full_target_path);
 		exit;
 	}
@@ -755,8 +762,8 @@ class Autotune_Remaps_Public extends BaseClass {
 		
 		header('Content-Type: ' . $mime_type);
 		header("Content-Transfer-Encoding: Binary; charset=ansi"); 
-		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap, false /* Not completed */) . "\"");
-		readfile($full_target_path);
+		header("Content-Disposition: attachment; filename=\"" . $this->get_remap_filename($remap /* Not completed */) . "\"");
+		readfile($full_target_path); 
 		exit;
 	}
 

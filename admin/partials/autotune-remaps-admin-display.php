@@ -55,7 +55,10 @@
                         <option value="0">PENDING</option> 
                         <option value="5">DELETED</option>
                     </select></div>
-                    <div id="displayArchived"><input type="checkbox" id="display-archived" ng-model="displayArchivedRemaps"/> <label for="display-archived">Display Archived</label></div>
+                    <div id="displayArchived"><input type="checkbox" id="display-archived" ng-model="displayArchivedRemaps"/> <label for="display-archived">Display Archived</label></div>    
+                 
+                    <div id="hidePrices"><input type="checkbox" id="hide-prices" ng-model="hidePricesToggle"/> <label for="hide-prices">Hide Prices</label></div>
+                  
                     <div id="exportAll"><input type="button" id="export-all" value="Export All (Excel)" ng-click="exportAllRemaps()"/></div> 
 
                     <div class="">
@@ -86,7 +89,7 @@
                             <td>Status</td>
                             <td>Vehicle</td>
                             <td>Requested By</td>
-                            <td>Price</td>
+                            <td ng-if="!hidePricesToggle">Price</td>
                             <td>Requested</td>
                             <td>Updated</td>
                             <td>Actions</td>
@@ -105,17 +108,18 @@
                             <select ng-model="remap.status" 
                                 ng-change="updateRemap(remap)">
                                 <option value="0">PENDING</option> 
-                                <option value="1" ng-disabled="remap.price == null || remap.price == 0" title="{{ inProgressStatusTitle(remap) }}">IN PROGRESS</option>   
-                                <option value="2" ng-disabled="remap.price == null || remap.price == 0" title="{{ paymentStatusTitle(remap) }}">PAYMENT</option>   
+                                <option value="1" ng-disabled="remap.price == null" title="{{ inProgressStatusTitle(remap) }}">IN PROGRESS</option>   
+                                <option value="2" ng-disabled="remap.price == null" title="{{ paymentStatusTitle(remap) }}">PAYMENT</option>   
                                 <option value="3">COMPLETE</option>   
                                 <option value="4">ARCHIVED</option>     
-                                <option value="5">DELETED</option>       
+                                <option value="5">DELETED</option>     
+                                <option value="6">PARKED</option>  
                             </select>
 
                         </td>
                         <td><a href="javascript:void(0);" ng-click="viewDetails(remap)">{{ remap.manufacturer }} {{ remap.model }} {{ remap.year }}</a></td>
                         <td>{{ remap.username }}</td>
-                        <td><input type="text" ng-model="remap.price" placeholder="0.00" title="Type a price and hit 'Enter' to update" ng-keypress="updatePrice(remap, $event)" size="10"/></td>
+                        <td ng-if="!hidePricesToggle"><input type="text" ng-model="remap.price" placeholder="0.00" title="Type a price and hit 'Enter' to update" ng-keypress="updatePrice(remap, $event)" size="10"/></td>
                         <td>{{ formatDate(remap.created_at) }}</td>
                         <td>{{ formatDate(remap.updated_at) }}</td>
                         <td>
@@ -151,6 +155,7 @@
                                 <option value="3">COMPLETE</option>   
                                 <option value="4">ARCHIVED</option>     
                                 <option value="5">DELETED</option>       
+                                <option value="6">PARKED</option>
                             </select>
 
                             <span ng-if="remap.type == 3" style="text-align: center;"> << PAID >> </span>

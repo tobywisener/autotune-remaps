@@ -16,7 +16,7 @@
  * Plugin Name:       Autotune Remaps
  * Plugin URI:        wisener.me
  * Description:       A system for anaging and requesting remaps. Handles uploading, downloading of ECU files, status tracking, email notifications, online payments (via Paypal) and emailing completed remaps as attachments when finished.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            Toby Wisener
  * Author URI:        wisener.me
  * License:           GPL-2.0+

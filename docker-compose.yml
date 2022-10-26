@@ -21,6 +21,7 @@ services:
     volumes:
       - ./testing/wp_data:/var/www/html
       - ./:/var/www/html/wp-content/plugins/autotune-remaps
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
     ports:
       - 4070:80
     restart: always
@@ -35,7 +36,7 @@ services:
     image: phpmyadmin
     restart: always
     ports:
-      - '8181:80'
+      - 8181:80
     environment:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: wordpress

@@ -14,17 +14,16 @@ Firstly make sure you have docker and docker-compose installed.
 2. You will be able to access a local version of Wordpress with the plugin enabled at:
 
 - http://localhost:4070
-- **Username:** admin
-- **Password:** Password1
+- **Username:** Garry_Autotune
+- **Password:** Aut0tun32020_
 
 For testing, customer accounts can be logged into on a separate browser / incognito mode:
 
-`blake / Password1`
+`blake_747 / Password1`
 
 To see/request user remaps: 
 
-`http://localhost:4070/my-remaps`
-(Upload currently not working)
+`http://localhost:4070/my-account/`
 
 Any changes you make to the source code will automatically update after a refresh.
 

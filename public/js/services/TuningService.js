@@ -36,8 +36,8 @@ autotune.service('TuningService', function($http) {
   	};
 
   	// Function to open the export all remaps URL in a new tab
-  	this.exportAllRemaps = function(remap_id) {
-  		var win = window.open(api_url + '/remaps/all', '_blank');
+  	this.exportAllRemaps = function(user_id) {
+  		var win = window.open(api_url + '/remaps/all/'+user_id, '_blank');
 		win.focus();
   	};
 

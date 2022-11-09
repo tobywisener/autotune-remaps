@@ -27,6 +27,8 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
 
     $scope.user_total = 0;
 
+    $scope.user_id = 0;
+
     // Function to handle the toggling of all remaps being selected
     $scope.selectAllRemaps = function() {
 
@@ -37,7 +39,10 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
 
     // Function to view all remaps and charges for a given user
     $scope.getUserHistory = function(item, model) {
+
         var user_id = item.id;
+        $scope.user_id = user_id;
+
         if(user_id === "" || user_id === null) {
             $scope.loadAllRemaps();
             return;
@@ -160,8 +165,22 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
 
     // Function to call the back end to export all remaps in Excel format
     $scope.exportAllRemaps = function() {
-        
-        TuningService.exportAllRemaps();
+
+        var remapArray = [];
+        //iterate through user files to find remaps
+
+        for (var i in $scope.remaps) {
+            //check if file is a remap
+            if($scope.remaps[i]['type'] == 0 ){
+                remapArray.push($scope.remaps[i])
+            }
+        }
+        console.log(remapArray);
+        if(remapArray.length > 0){
+            TuningService.exportAllRemaps($scope.user_id);
+        }else {
+            alert('There are no remaps to export')
+        }
     };
 
     // Function to update the statuses for all remaps currently selected

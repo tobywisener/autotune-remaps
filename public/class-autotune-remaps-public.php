@@ -406,10 +406,15 @@ class Autotune_Remaps_Public extends BaseClass {
 		);
 
 		register_rest_route( // Resource for GET all Remaps (admin export)
-	    	'autotune-remaps/v1', '/remaps/all',
+	    	'autotune-remaps/v1', '/remaps/all/(?P<id>\d+)',
 	    	[ 'methods' => 'GET', 'callback' => [$this, 'api_batch_export_remaps'], 'permission_callback' => '__return_true' ]
 		);
-
+/*
+        register_rest_route(
+            'autotune-remaps/v1', '/remaps/user/(?P<id>\d+)',
+            ['methods'=>'GET','callback' => [$this, 'api_batch_export_user_remaps'],'permission_callback'=>'__return_true'];
+        );
+*/
 		register_rest_route( // Resource for POST IPN data from PayPal
 	    	'autotune-remaps/v1', '/remaps/payment',
 	    	[ 'methods' => 'POST', 'callback' => [$this, 'api_post_payment_callback'], 'permission_callback' => '__return_true' ]
@@ -469,31 +474,35 @@ class Autotune_Remaps_Public extends BaseClass {
 	 *
 	 * @since    1.0.0
 	 */	
-	public function api_get_all_remaps(WP_REST_Request $request, $output = OBJECT) {
-		global $wpdb;
-		
+	public function api_get_all_remaps(WP_REST_Request $request, $output = OBJECT,$user_id = "") {
+        global $wpdb;
 		$isExport = ($output == ARRAY_A /* ARRAY_A is only used during export */);
 		$limit = "LIMIT 500"; // By default, only show 500 remaps
-		if ($isExport) {
-			// For exports, show unlimited remaps
-			$limit = "";
-		}
+        if ($isExport) {
+            if($user_id || $user_id != 0) {
+                $user_id_query = 'AND users.id =' . $user_id;
+            }else{
+                $user_id_query = "";
+            }
+            // For exports, show unlimited remaps
+            $limit = "";
+        }
 
-		$results = $wpdb->get_results( 
+		$results = $wpdb->get_results(
 			"
 			SELECT ".$this->db_table_name.".*,
 			users.user_nicename AS username
 			FROM ".$this->db_table_name." 
 			LEFT JOIN ".$wpdb->prefix."users AS users ON users.id = ".$this->db_table_name.".user_id 
 			WHERE status <> " . self::$STATUS['DELETED'] . "
+			" . $user_id_query ." 
 			AND type = " . self::$TYPE['REMAP'] . "
-			AND created_at > DATE_ADD(DATE(NOW()), INTERVAL -2 DAY)
 			ORDER BY remap_id DESC ".$limit,
 			$output
 		);
-
 		return $results;
 	}
+
 
 	/**
 	 *  API endpoint to get all remaps requested by the currently authenticated user
@@ -584,16 +593,25 @@ class Autotune_Remaps_Public extends BaseClass {
 	 *  API endpoint to update a specific remap resource
 	 *
 	 * @since    1.0.0
-	 */	
+	 */
+
+
+    public function api_delete_remap($remap_id){
+
+    }
 	public function api_update_remap(WP_REST_Request $request) {
 		global $wpdb;
 
 		// You can get the combined, merged set of parameters:
 		$req_params = $request->get_params();
-
 		// Get the original remap resource from storage
 		$original_remap = $this->get_remap($req_params['resource']->remap_id);
 
+
+        if($req_params['status'] == self::$STATUS['DELETED']){
+            $this->api_batch_delete_remaps($req_params['resource']->remap_id);
+            return "";
+        }
 		$update_array = [
 			'price' => $req_params['price'],
 			'updated_at' => date('Y-m-d H:i:s')
@@ -602,6 +620,8 @@ class Autotune_Remaps_Public extends BaseClass {
 		if($original_remap->status != $req_params['status']) {
 			$update_array['status'] = $req_params['status'];
 		}
+
+
 
 		$wpdb->update( $this->db_table_name, $update_array, 
 		[ 'remap_id' => $req_params['resource']->remap_id ]  
@@ -670,7 +690,7 @@ class Autotune_Remaps_Public extends BaseClass {
 	 *  API endpoint to batch update a given set of remaps to a specified status
 	 *
 	 * @since    1.0.0
-	 */	
+	 */
 	public function api_batch_update_remaps(WP_REST_Request $request) {
 		global $wpdb;
 
@@ -680,19 +700,51 @@ class Autotune_Remaps_Public extends BaseClass {
 		$update_ids = implode(',', $req_params['remap_ids']);
 		$status = $req_params['status'];
 
-		$wpdb->query("UPDATE ".$this->db_table_name."
-			SET status = '".$status."'
-			WHERE remap_id IN (".$update_ids.")");
-
+        if($status == self::$STATUS['DELETED']){
+                $this->api_batch_delete_remaps($update_ids);
+        }else {
+            $wpdb->query("UPDATE " . $this->db_table_name . "
+			SET status = '" . $status . "'
+			WHERE remap_id IN (" . $update_ids . ")");
+        }
 		// Return freshly updated rows for front end consolidation
 		return $this->api_get_all_remaps($request);
 	}
 
-	function api_batch_export_remaps(WP_REST_Request $request) {
-		global $wpdb;
+    function api_batch_delete_remaps($update_ids){
+        global $wpdb;
 
+        $remaps = $wpdb->get_results("SELECT * FROM ". $this->db_table_name ." WHERE remap_id IN (".$update_ids.")" );
+
+        // Ids of remap files which have been successfully deleted
+        $remaps_for_deletion = [];
+
+        //get permissions (only need to do it once)
+        chmod($this->target_dir, 0755);
+
+        foreach ($remaps as $remap){
+            // get file path
+            $full_target_path = $this->target_dir.$remap->remap_file;
+
+            if(file_exists($full_target_path) && unlink($full_target_path)) {
+                $completed_full_target_path = $this->target_dir.'completed_'.$remap->remap_file;
+                unlink($completed_full_target_path);
+            }
+            $remaps_for_deletion[] = $remap->remap_id;
+        }
+
+        // Do this outside the foreach loop
+        $wpdb->query("DELETE FROM " . $this->db_table_name. " WHERE remap_id IN (".implode(",", $remaps_for_deletion).")");
+    }
+
+	function api_batch_export_remaps(WP_REST_Request $request) {
+        global $wp_session,$wpdb;
+
+        $url_params = $request->get_url_params();
+
+        $user_id = $url_params['id'];
 		// Give us the remap data as an associative array
-		$remaps = $this->api_get_all_remaps($request, ARRAY_A);
+		$remaps = $this->api_get_all_remaps($request, ARRAY_A,$user_id);
 		$spreadsheet = new Spreadsheet();
 		$sheet = $spreadsheet->getActiveSheet();
 		$sheet->setCellValue('A1', 'Hello World!');

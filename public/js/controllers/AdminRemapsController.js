@@ -198,7 +198,7 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
             return; // Quit the function
         }
 
-        TuningService.updateRemaps(update_ids, $scope.setAllRemapsStatus).then(function(response) {
+        TuningService.updateRemaps(update_ids, $scope.setAllRemapsStatus,$scope.user_id).then(function(response) {
             $scope.remaps = response.data;
         }, console.error);
 

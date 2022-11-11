@@ -98,11 +98,12 @@ autotune.service('TuningService', function($http) {
 	};
 
 	// Function to update a set of remaps in storage
-	this.updateRemaps = function(remap_ids, status) {
+	this.updateRemaps = function(remap_ids, status,user_id) {
 
 		return $http.post(api_url + '/remaps/all', {
 			remap_ids: remap_ids,
-			status: status
+			status: status,
+			user_id: user_id
 		});
 	};
 

@@ -478,15 +478,15 @@ class Autotune_Remaps_Public extends BaseClass {
         global $wpdb;
 		$isExport = ($output == ARRAY_A /* ARRAY_A is only used during export */);
 		$limit = "LIMIT 500"; // By default, only show 500 remaps
-        if ($isExport) {
-            if($user_id || $user_id != 0) {
-                $user_id_query = 'AND users.id =' . $user_id;
-            }else{
-                $user_id_query = "";
-            }
-            // For exports, show unlimited remaps
-            $limit = "";
-        }
+		if ($isExport) {
+			if(!empty($user_id) && $user_id != 0) {
+				$user_id_query = 'AND users.id =' . $user_id;
+			}else{
+				$user_id_query = "";
+			}
+			// For exports, show unlimited remaps
+			$limit = "";
+		}
 
 		$results = $wpdb->get_results(
 			"
@@ -697,9 +697,9 @@ class Autotune_Remaps_Public extends BaseClass {
 		// You can get the combined, merged set of parameters:
 		$req_params = $request->get_params();
 
+		$user_id = $req_params['user_id'];
 		$update_ids = implode(',', $req_params['remap_ids']);
 		$status = $req_params['status'];
-
         if($status == self::$STATUS['DELETED']){
                 $this->api_batch_delete_remaps($update_ids);
         }else {
@@ -707,8 +707,10 @@ class Autotune_Remaps_Public extends BaseClass {
 			SET status = '" . $status . "'
 			WHERE remap_id IN (" . $update_ids . ")");
         }
-		// Return freshly updated rows for front end consolidation
-		return $this->api_get_all_remaps($request);
+
+		// Return freshly updated rows for front end consolidation, if user_id = 0 then get all remaps
+		return $user_id != 0 ? $this->get_user_remaps($user_id)
+			:$this->api_get_all_remaps($request);
 	}
 
     function api_batch_delete_remaps($update_ids){

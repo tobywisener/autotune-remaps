@@ -257,6 +257,10 @@
 	<?php echo date("F j, Y, g:i a", strtotime($data["remap"]["created_at"])); ?>
 </td>
 </tr>
+<tr>
+<td style="width: 50%; padding-right: 0.5em; text-align: right;"><b>Autotune Note:</b></td>
+<td style="text-align: left;"><? echo $data['remap']->autotune_note; ?></td>
+</tr>
 </table>
 </div>
 <table border="0" cellpadding="0" cellspacing="0" class="divider" role="presentation" style="table-layout: fixed; vertical-align: top; border-spacing: 0; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; min-width: 100%; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;" valign="top" width="100%">

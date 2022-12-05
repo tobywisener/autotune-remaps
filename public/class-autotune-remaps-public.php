@@ -300,11 +300,15 @@ class Autotune_Remaps_Public extends BaseClass {
 			case self::$STATUS['PAYMENT']:
 				// Send and email to the user requesting payment
 
-				$this->sendMail("PAYMENT-USER", 
-					$remap_owner->user_email, 
-					[ 
+				if(in_array( 'contributor', $remap_owner->roles )){
+					$remap->price = "";
+				}
+				$this->sendMail("PAYMENT-USER",
+					$remap_owner->user_email,
+					[
 						"remap" => $remap,
-						"remaps_link" => $this->getBaseUrl() . "/my-account"
+						"remaps_link" => $this->getBaseUrl() . "/my-account",
+						"isContributor"=> $isContributor
 					]
 				);
 			break;

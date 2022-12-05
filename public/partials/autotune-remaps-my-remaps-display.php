@@ -1,4 +1,5 @@
 <script type="text/javascript">
+    var contributor = <?php echo in_array('contributor',wp_get_current_user()->roles)?"1":"0";?>;
     var USER_ID = <?php echo wp_get_current_user()->ID; ?>;
 </script>
 
@@ -6,7 +7,7 @@
 
 <input type="checkbox" id="display-archived" ng-model="displayArchivedRemaps"/> <label for="display-archived">Display Archived</label>
 
-<span style="float:right" ng-show="remaps.length > 0">Total: {{ user_total | currency : '£' : 2 }}</span>
+<span style="float:right" ng-show="remaps.length > 0 && !isContributor">Total: {{ user_total | currency : '£' : 2 }}</span>
 
 <table class="user_remaps">
 
@@ -14,7 +15,7 @@
         <tr>
             <td>Status</td>
             <td>Vehicle</td>
-            <td>Price</td>
+            <td ng-hide="isContributor">Price</td>
             <td>Requested</td>
             <td>Updated</td>
             <td>Actions</td>
@@ -26,7 +27,7 @@
         <tr ng-if="remap.type == 0">
             <td>{{ statusLabel(remap.status) }}</td>
             <td><a href="javascript:void(0);" ng-click="viewDetails(remap)">{{ remap.manufacturer }} {{ remap.model }} {{ remap.year }}</a></td>
-            <td>{{ remap.price | currency : '£' : 2 }}</td>
+            <td ng-hide="isContributor">{{ remap.price | currency : '£' : 2 }}</td>
             <td>{{ formatDate(remap.created_at) }}</td>
             <td>{{ formatDate(remap.updated_at) }}</td>
             <td>
@@ -35,7 +36,7 @@
                     <input type="hidden" name="business" value="<?php echo Autotune_Remaps_Public::$paypal_email; ?>"/>
                     <input type="hidden" name="lc" value="GB"/>
                     <input type="hidden" name="item_name" value="Remap-{{ remap.remap_id }}"/>
-                    <input type="hidden" name="amount" value="{{ remap.price }}"/>
+                    <input ng-hide="isContributor" type="hidden" name="amount" value="{{ remap.price }}"/>
                     <input type="hidden" name="currency_code" value="GBP"/>
                     <input type="hidden" name="button_subtype" value="services"/>
                     <input type="hidden" name="no_note" value="0"/>
@@ -52,7 +53,7 @@
 
         <tr ng-if="remap.type == 1">
             <td colspan="2" style="text-align:center;" title="{{ remap.other_notes }}"> << SERVICE >> </td>
-            <td>{{ remap.price | currency : '£' : 2 }}</td>
+            <td ng-hide="isContributor">{{ remap.price | currency : '£' : 2 }}</td>
             <td>{{ formatDate(remap.created_at) }}</td>
             <td>{{ formatDate(remap.updated_at) }}</td>
             <td>
@@ -78,7 +79,7 @@
 
         <tr ng-if="remap.type == 2">
             <td colspan="2" style="text-align:center;" title="{{ remap.other_notes }}"> << SUBSCRIPTION >> </td>
-            <td>{{ remap.price | currency : '£' : 2 }}</td>
+            <td ng-hide="isContributor">{{ remap.price | currency : '£' : 2 }}</td>
             <td>{{ formatDate(remap.created_at) }}</td>
             <td>{{ formatDate(remap.updated_at) }}</td>
             <td>
@@ -104,7 +105,7 @@
 
         <tr ng-if="remap.type == 3">
             <td colspan="2" style="text-align:center;" title="{{ remap.other_notes }}"> << PAYMENT >> </td>
-            <td>+ {{ remap.price | currency : '£' : 2 }}</td>
+            <td ng-hide="isContributor">+ {{ remap.price | currency : '£' : 2 }}</td>
             <td colspan="3" style="text-align: center;">{{ formatDate(remap.created_at) }}</td>
         </tr>
     </tbody>

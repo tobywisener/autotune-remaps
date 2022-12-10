@@ -372,6 +372,7 @@ class Autotune_Remaps_Public extends BaseClass {
 	    	'args' => [
 					'remap_id' => [ 'validate_callback' =>  [ $this, 'api_validate_update_remap' ]],
 					'price' => [ 'validate_callback' =>  [ $this, 'api_validate_update_remap' ]],
+			        'autotune_note'=>['validate_callback' =>[$this, 'api_validate_update_remap']]
 				],'permission_callback' => '__return_true'
 
 		    ]
@@ -619,6 +620,10 @@ class Autotune_Remaps_Public extends BaseClass {
 
 		if($original_remap->status != $req_params['status']) {
 			$update_array['status'] = $req_params['status'];
+		}
+
+		if($original_remap->autotune_note != $req_params['autotune_note']){
+			$update_array['autotune_note'] = $req_params['autotune_note'];
 		}
 
 

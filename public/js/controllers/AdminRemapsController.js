@@ -11,6 +11,7 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
 
     $scope.users = [];
 
+    $scope.noteSaved = false;
     $scope.modal = null;
 
     $scope.viewingDetailsRemap = {};
@@ -242,6 +243,18 @@ autotune.controller('AdminRemapsController', ['$scope', 'TuningService', '$timeo
 
         return '✘';
     };
+
+    $scope.addRemapNote = function(remap){
+        $scope.updateRemap(remap);
+        $scope.noteSaved = true;
+        setTimeout(function ()
+        {
+            $scope.$apply(function()
+            {
+                $scope.noteSaved = false;
+            });
+        }, 2000);
+    }
 
     angular.element(document).ready(function () {
         

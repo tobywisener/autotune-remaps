@@ -258,6 +258,14 @@
                     <td>Other Notes</td>
                     <td>{{ viewingDetailsRemap.other_notes }}</td>
                 </tr>
+                <tr>
+                    <td>Autotune Notes</td>
+                    <td>
+                        <textarea ng-model="viewingDetailsRemap.autotune_note">{{ viewingDetailsRemap.autotune_note }}</textarea>
+                        <button type="button" ng-click="addRemapNote(viewingDetailsRemap)">Save</button>
+                        <label ng-show="ctrl.noteSaved">Saved!</label>
+                </td>
+                </tr>
 
             </table>
 

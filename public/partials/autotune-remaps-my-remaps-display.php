@@ -17,6 +17,7 @@
             <td>Price</td>
             <td>Requested</td>
             <td>Updated</td>
+            <td>AutoTune Notes</td>
             <td>Actions</td>
         </tr>
     </thead>
@@ -29,6 +30,7 @@
             <td>{{ remap.price | currency : '£' : 2 }}</td>
             <td>{{ formatDate(remap.created_at) }}</td>
             <td>{{ formatDate(remap.updated_at) }}</td>
+            <td>{{remap.autotune_note}}</td>
             <td>
                 <form ng-if="remap.status == 2" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                     <input type="hidden" name="cmd" value="_xclick"/>
@@ -176,6 +178,10 @@
             <tr>
                 <td>Other Notes</td>
                 <td>{{ viewingDetailsRemap.other_notes }}</td>
+            </tr>
+            <tr>
+                <td>AutoTune Notes</td>
+                <td>{{viewingDetailsRemap.autotune_note}}</td>
             </tr>
 
         </table>

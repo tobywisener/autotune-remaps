@@ -59,6 +59,10 @@
 <td style="width: 50%; padding-right: 0.5em; text-align: right;"><b>Started at:</b></td>
 <td style="text-align: left;"><?php echo date("F j, Y, g:i a", strtotime($data["remap"]->updated_at)); ?></td>
 </tr>
+<tr>
+    <td style="width: 50%; padding-right: 0.5em; text-align: right;"><b>Autotune Note:</b></td>
+    <td style="text-align: left;"><? echo $data['remap']->autotune_note; ?></td>
+</tr>
 </tbody>
 </table>
 </div>

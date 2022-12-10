@@ -37,7 +37,8 @@ autotune.controller('MyRemapsController', ['$scope', '$timeout', '$filter', 'Tun
     };
 
     angular.element(document).ready(function () {
-        
+
+        $scope.isContributor = contributor;
         // Set the modal scope variable
         $scope.modal = document.getElementById("myRemapsModal");
 

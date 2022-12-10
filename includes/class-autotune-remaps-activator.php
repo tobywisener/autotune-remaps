@@ -50,6 +50,7 @@ class Autotune_Remaps_Activator {
 		    	`remap_file` TEXT NOT NULL ,
 		    	`ecu_type` TEXT NOT NULL ,
 		    	`price` DECIMAL(13,2) NULL ,
+		    	`autotune_note` TEXT NULL ,
 		    	`performance_tuning` BOOLEAN NOT NULL ,
 		    	`lambda_o2_decat` BOOLEAN NOT NULL ,
 		    	`dpf_removal` BOOLEAN NOT NULL ,

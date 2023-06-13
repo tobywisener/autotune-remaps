@@ -182,7 +182,7 @@ class Autotune_Remaps_Public extends BaseClass {
 		}
 
 		// Save uploaded file to the 'bin' directory within the plugin directory
-		chmod($this->target_dir, 0755);
+		@chmod($this->target_dir, 0755);
 		
 		$ext = pathinfo($_FILES['autotune_file']['name'], PATHINFO_EXTENSION);
 		$target_name = substr(md5(rand()), 0, 7) . "." . $ext;
@@ -735,7 +735,7 @@ class Autotune_Remaps_Public extends BaseClass {
         $remaps_for_deletion = [];
 
         //get permissions (only need to do it once)
-        chmod($this->target_dir, 0755);
+        @chmod($this->target_dir, 0755);
 
         foreach ($remaps as $remap){
             // get file path

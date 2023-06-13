@@ -188,7 +188,7 @@ class BaseClass {
 		$template_file = self::$mail_templates[$template]["template"];
 
 		// Specify the From: header to increase the authenticity of the email
-		$headers = "From: Autotune <". self::$from_email .">\r\n";
+		$headers = array("From: Autotune <". self::$from_email .">", "Content-Type: text/html; charset=UTF-8");
 
 		// Compile the email template with the data passed into this function
 		$completedTemplate = $this->template(WP_PLUGIN_DIR.'/autotune-remaps/public/partials/emails/' . $template_file, $data);

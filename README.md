@@ -30,4 +30,13 @@ Any changes you make to the source code will automatically update after a refres
 When finished testing, run:
 ```docker compose down```
 
-**Note:** The /wp-json/ API doesnt work with default Permalinks. 
+**Note:** The /wp-json/ API doesnt work with default Permalinks.
+
+## PhpMyAdmin
+
+To access phpmyadmin for inside the docker container, visit
+
+```http://localhost:8181```
+
+- **Username:** wordpress
+- **Password:** wordpress

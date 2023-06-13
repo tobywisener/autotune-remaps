@@ -172,6 +172,10 @@ class Autotune_Remaps_Public extends BaseClass {
 			$wp_session['autotune_submit_remap_errors']['ECU Type'] = "Please specify a valid ECU Type";
 		}
 
+        if(get_current_user_id() == 0) {
+            $wp_session['autotune_submit_remap_errors']['User'] = "Cannot detect User ID, please check cookies are enabled and your browser is modern enough.";
+        }
+
 		if(count($wp_session['autotune_submit_remap_errors']) > 0) {
 			// Guard clause to stop processing if any errors are found
 			return; 

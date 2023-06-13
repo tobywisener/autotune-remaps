@@ -323,7 +323,8 @@ class BaseClass {
 	    $rowcount = $wpdb->get_var("SELECT COUNT(*) FROM " . $this->db_table_name . " 
 	    	WHERE status = '" . self::$STATUS['PENDING'] . "' 
 	    		AND created_at < '" . $remap_created_at . "'
-	    		AND remap_id != '" . $remap_id ."'");
+	    		AND remap_id != '" . $remap_id ."'
+                AND user_id != '0'");
 
 	    return $rowcount + 1 /* Plus 1 because those remaps must be completed first */;
 	}

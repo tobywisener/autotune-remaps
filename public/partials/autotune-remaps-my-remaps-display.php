@@ -31,7 +31,7 @@
             <td ng-hide="isContributor">{{ remap.price | currency : '£' : 2 }}</td>
             <td>{{ formatDate(remap.created_at) }}</td>
             <td>{{ formatDate(remap.updated_at) }}</td>
-            <td>{{remap.autotune_note}}</td>
+            <td style="font-size:14px;">{{remap.autotune_note}}</td>
             <td>
                 <form ng-if="remap.status == 2" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                     <input type="hidden" name="cmd" value="_xclick"/>

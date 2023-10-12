@@ -483,10 +483,11 @@ class Autotune_Remaps_Public extends BaseClass {
 	 *
 	 * @since    1.0.0
 	 */	
-	public function api_get_all_remaps(WP_REST_Request $request, $output = OBJECT,$user_id = "") {
+	public function api_get_all_remaps(WP_REST_Request $request, $output = OBJECT, $user_id = "") {
         global $wpdb;
 		$isExport = ($output == ARRAY_A /* ARRAY_A is only used during export */);
 		$limit = "LIMIT 500"; // By default, only show 500 remaps
+        $remap_type_query = "AND type = " . self::$TYPE['REMAP']; // By default, only fetch remaps
 		if ($isExport) {
 			if(!empty($user_id) && $user_id != 0) {
 				$user_id_query = 'AND users.id =' . $user_id;
@@ -497,6 +498,11 @@ class Autotune_Remaps_Public extends BaseClass {
 			$limit = "";
 		}
 
+        if ($isExport || (!empty($user_id) && $user_id != 0)) {
+            // Always include services and charges in exports and user filtered grid
+            $remap_type_query = "";
+        }
+
 		$results = $wpdb->get_results(
 			"
 			SELECT ".$this->db_table_name.".*,
@@ -504,13 +510,13 @@ class Autotune_Remaps_Public extends BaseClass {
 			FROM ".$this->db_table_name." 
 			LEFT JOIN ".$wpdb->prefix."users AS users ON users.id = ".$this->db_table_name.".user_id 
 			WHERE status <> " . self::$STATUS['DELETED'] . "
-			" . $user_id_query ." 
+			" . $user_id_query . " 
+			" . $remap_type_query . "
 			ORDER BY remap_id DESC ".$limit,
 			$output
 		);
 		return $results;
 	}
-
 
 	/**
 	 *  API endpoint to get all remaps requested by the currently authenticated user

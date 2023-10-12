@@ -166,7 +166,7 @@
                         <td ng-if="remap.type == 2" colspan="2" style="text-align: center;" title="{{ remap.other_notes }}"> << SUBSCRIPTION >> </td>
                         <td ng-if="remap.type == 3" colspan="2" style="text-align: center;" title="{{ remap.other_notes }}"> << PAYMENT >> </td>
                         
-                        <td><input type="text" ng-model="remap.price" placeholder="0.00" title="Type a price and hit 'Enter' to update" ng-keypress="updatePrice(remap, $event)" size="10"/></td>
+                        <td ng-if="!hidePricesToggle"><input type="text" ng-model="remap.price" placeholder="0.00" title="Type a price and hit 'Enter' to update" ng-keypress="updatePrice(remap, $event)" size="10"/></td>
                         <td>{{ formatDate(remap.created_at) }}</td>
                         <td>{{ formatDate(remap.updated_at) }}</td>
                         <td>

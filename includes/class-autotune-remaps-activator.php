@@ -71,6 +71,14 @@ class Autotune_Remaps_Activator {
 		    add_option( 'my_db_version', $my_products_db_version );
 		}
 
+        //adding autotune note column
+        $row = $wpdb->get_results("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
+                          WHERE table_name = {$table_name} AND column_name = 'autotune_note'");
+
+        if (empty($row)) {
+            $wpdb->query("ALTER TABLE {$table_name} ADD autotune_note VARCHAR(100) NOT NULL AFTER price");
+        }
+
 		/* Migration 18/02/2020
 		Toby: Make some columns nullable to handle storing of charges in the same table
 

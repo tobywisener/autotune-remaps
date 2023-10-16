@@ -144,17 +144,7 @@ class Autotune_Remaps_Admin extends BaseClass {
 
 			$User = get_user_by('id', get_current_user_id());
 
-			// Send an email to requesting user
-			/*
-			$this->sendMail("REQUESTED-USER", 
-				$User->user_email, 
-				[ 
-					"remap" => $data,
-					"ecu_file_size" => $_FILES["autotune_file"]["size"],
-					"queue_position" => $remap_queue_position,
-					"remaps_link" => $this->getBaseUrl() . "/my-account"
-				 ]);
-			*/
+			// Don't send an email to requesting user
 
 			// Prevent the reload-submit issue by refreshing the page
 			header('Location: '.$_SERVER['REQUEST_URI']);
@@ -171,5 +161,16 @@ class Autotune_Remaps_Admin extends BaseClass {
 
 		return include($templatePath);  
 	}
+
+    /**
+     * Adds a user contact method field for CC remap emails to.
+     *
+     * @param $user_contact
+     * @return mixed
+     */
+    public function custom_user_contact_methods($user_contact) {
+        $user_contact['cc_remap_emails_to'] = 'CC Remap emails to:';
+        return $user_contact;
+    }
 
 }

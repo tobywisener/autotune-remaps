@@ -171,6 +171,9 @@ class Autotune_Remaps {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'init', $plugin_admin, 'handle_admin_create_charge' );
 
+        // Add a custom field for the admin user.
+        $this->loader->add_filter('user_contactmethods', $plugin_admin, 'custom_user_contact_methods');
+
 		// Enqueue the scripts, styles and REST API from the public end of the plugin
 		$plugin_public = new Autotune_Remaps_Public( $this->get_plugin_name(), $this->get_version() );
 

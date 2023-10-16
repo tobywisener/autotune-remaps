@@ -179,7 +179,7 @@ class BaseClass {
 	 *
 	 * @since    1.0.0
 	 */
-	protected function sendMail($template, $to, $data, $attachments = array()) {
+	protected function sendMail($template, $to, $data, $cc = "") {
 
 		// Enable HTML Emails so the templates can be sent out properly
 		add_filter( 'wp_mail_content_type', [ $this, 'get_email_html_content_type' ]);
@@ -188,13 +188,21 @@ class BaseClass {
 		$template_file = self::$mail_templates[$template]["template"];
 
 		// Specify the From: header to increase the authenticity of the email
-		$headers = array("From: Autotune <". self::$from_email .">", "Content-Type: text/html; charset=UTF-8");
+		$headers = array(
+            "From: Autotune <". self::$from_email .">",
+            "Content-Type: text/html; charset=UTF-8"
+        );
+
+        // Check if $cc is not empty and contains valid email addresses
+        if (!empty($cc)) {
+            $headers[] = "Cc: " . $cc;
+        }
 
 		// Compile the email template with the data passed into this function
 		$completedTemplate = $this->template(WP_PLUGIN_DIR.'/autotune-remaps/public/partials/emails/' . $template_file, $data);
 
 		// Send the email using the base wordpress function
-		$result = wp_mail( $to, self::$mail_templates[$template]["subject"], $completedTemplate, $headers, $attachments );
+		$result = wp_mail( $to, self::$mail_templates[$template]["subject"], $completedTemplate, $headers, array() );
 		if(!$result) {
 			error_log("Email not sent to ($to)");
 		}

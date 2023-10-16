@@ -239,7 +239,8 @@ class Autotune_Remaps_Public extends BaseClass {
 					"ecu_file_size" => $_FILES["autotune_file"]["size"],
 					"queue_position" => $remap_queue_position,
 					"remaps_link" => $this->getBaseUrl() . "/my-account"
-				 ]);
+				 ],
+                get_user_meta($User->ID, 'cc_remap_emails_to', true));
 
 			// Send an email to the admin email
 			$this->sendMail("REQUESTED-ADMIN", 
@@ -313,7 +314,8 @@ class Autotune_Remaps_Public extends BaseClass {
 						"remap" => $remap,
 						"remaps_link" => $this->getBaseUrl() . "/my-account",
 						"isContributor"=> $isContributor
-					]
+					],
+                    get_user_meta($remap_owner->ID, 'cc_remap_emails_to', true)
 				);
 			break;
 
@@ -326,7 +328,8 @@ class Autotune_Remaps_Public extends BaseClass {
 						"remap" => $remap,
 						"remaps_link" => $this->getBaseUrl() . "/my-account",
 						"download_link" => $this->get_remap_download_link($remap->remap_id)
-					]
+					],
+                    get_user_meta($remap_owner->ID, 'cc_remap_emails_to', true)
 				);
 
 			break;
@@ -666,7 +669,8 @@ class Autotune_Remaps_Public extends BaseClass {
 						[ 
 							"remap" => $updated_remap,
 							"remaps_link" => $this->getBaseUrl() . "/my-account"
-						]
+						],
+                        get_user_meta($remap_owner->ID, 'cc_remap_emails_to', true)
 					);
 				break;
 
@@ -678,7 +682,8 @@ class Autotune_Remaps_Public extends BaseClass {
 						[ 
 							"remap" => $updated_remap,
 							"remaps_link" => $this->getBaseUrl() . "/my-account"
-						]
+						],
+                        get_user_meta($remap_owner->ID, 'cc_remap_emails_to', true)
 					);
 				break;
 
@@ -691,7 +696,8 @@ class Autotune_Remaps_Public extends BaseClass {
 							"remap" => $updated_remap,
 							"remaps_link" => $this->getBaseUrl() . "/my-account",
 							"download_link" => $this->get_remap_download_link($updated_remap->remap_id)
-						]
+						],
+                        get_user_meta($remap_owner->ID, 'cc_remap_emails_to', true)
 					);
 
 				break;
@@ -898,7 +904,8 @@ class Autotune_Remaps_Public extends BaseClass {
 					"remap" => $updated_remap,
 					"remaps_link" => $this->getBaseUrl() . "/my-account",
 					"download_link" => $this->get_remap_download_link($remap->remap_id)
-				]
+				],
+                get_user_meta($remap_owner->ID, 'cc_remap_emails_to', true)
 			);
 		}
 
